@@ -46,7 +46,7 @@ while (True):
   ctrlsw = shiftIn(SWdPIN,SWcPIN,MSBFIRST)
   ctrlsw = ctrlsw + (shiftIn(SWdPIN,SWcPIN,MSBFIRST) << 8)
   GPIO.output(SWlPIN ,True)
-  print("Address: ",addrsw," Control:",ctrlsw)
+  print("Address: ",hex(addrsw)," Control:",hex(ctrlsw))
   GPIO.output(LEDlPIN ,False)
   shiftOut(LEDdPIN,LEDcPIN,MSBFIRST,ctrlsw >> 8)
   shiftOut(LEDdPIN,LEDcPIN,MSBFIRST,addrsw)
