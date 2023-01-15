@@ -1,27 +1,23 @@
 #ifndef _PINS_H_
 #define _PINS_H_
 
-/*
-Purple = MOSI			(To 11)
-Blue = LED output enable	(To 4)
-Yellow = LED latch		(To 8)
-Red = CLK			(To 13)
+//Define pins 
+#define LEDdPIN  PIN_PD1
+#define LEDlPIN  PIN_PD2
+#define LEDcPIN  PIN_PD3
+#define SWdPIN   PIN_PD5
+#define SWlPIN   PIN_PD6
+#define SWcPIN   PIN_PD4
+//Latch Delay
+#define lDelay 5
 
-Purple (on memory) = CS		(To 5)
-Yellow (on memory) = MISO	(To 12)
-
-Green (on SD) = 3.3V
-Grey (on SD) = CS		(To 6)
-
-*/
-
-#define LEDS_OE 4
-#define LEDS_LATCH 8
-
-#define MEMORY_CS 5
-#define SD_CS 6
-
-#define SWITCHES_LOAD 7
-#define SWITCHES_CS 3
+#define RAMCS    PIN_PF0
+#define RAMcPIN  PIN_PA6
+#define RAMdoPIN PIN_PA5
+#define RAMdiPIN PIN_PA4
+#define SDcsPIN  PIN_PC3
+#define SDdiPIN  PIN_PC0
+#define SDdoPIN  PIN_PC1
+#define SDcPIN   PIN_PC2
 
 #endif

@@ -2,23 +2,19 @@
 #include <stdlib.h>
 #include "intel8080.h"
 #include "88dcdd.h"
-#ifdef WIN32
-	#include <Windows.h>
-	#include <WinSock.h>
-#else
-	// socket
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <netinet/ip.h>
-	#include <sys/ioctl.h>
-	#include <fcntl.h>
 
-	// strcat
-	#include <string.h>
-	#include "pi_panel.h"
-	#include <pigpio.h>
-#endif
+// socket
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+	
+#include <string.h>
+#include <time.h>
+#include "pi_panel.h"
+#include <pigpio.h>
 
 int sock;
 int client_sock;
@@ -27,29 +23,6 @@ void dump_regs(intel8080_t *cpu)
 {
 	printf("%04x\t%02x\t%04x\tC: %02x\tD: %02x\tE: %02x\n", cpu->address_bus, cpu->data_bus, cpu->registers.pc, cpu->registers.c, cpu->registers.d, cpu->registers.e);
 }
-
-#ifdef WIN32
-uint8_t key_states[256];
-
-uint8_t get_key(uint8_t code)
-{
-	uint8_t ret_val = 0;
-
-	if(GetAsyncKeyState(code))
-	{
-		if(!key_states[code])
-			ret_val = 1;
-
-		key_states[code] = 1;
-	}
-	else
-	{
-		key_states[code] = 0;
-	}
-
-	return ret_val;
-}
-#endif
 
 uint8_t term_in()
 {
@@ -101,7 +74,6 @@ const char *byte_to_binary(int x)
     return b;
 }
 
-
 void load_mem_file(const char* filename, size_t offset)
 {
 	size_t size;
@@ -120,7 +92,7 @@ uint8_t sense()
 
 void load_memory()
 {
-        load_mem_file("software/ROMs/DBL.bin", 0xff00);
+        // load_mem_file("software/ROMs/DBL.bin", 0xff00);
         load_mem_file("software/ROMs/8K Basic/8kBas_e0.bin", 0xe000);
         load_mem_file("software/ROMs/8K Basic/8kBas_e8.bin", 0xe800);
         load_mem_file("software/ROMs/8K Basic/8kBas_f0.bin", 0xf000);
@@ -141,25 +113,8 @@ int main(int argc, char *argv[])
 
 	rpi_init();
 
-#ifdef WIN32
-	WSADATA wsaData;
-
-	if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
-	{
-		printf("Could not start WSA\n");
-		return 1;
-	}
-
-	memset(key_states, 0, 256);
-
-#endif
-
 	memset(memory, 0, 64*1024);
 	sock = socket(AF_INET, SOCK_STREAM, 0);
-
-#ifdef WIN32
-	ioctlsocket(sock, FIONBIO, &ok);
-#endif
 
 	setsockopt(sock, SOL_SOCKET, SO_LINGER, &yes, sizeof(char));
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
@@ -183,10 +138,6 @@ int main(int argc, char *argv[])
 		client_sock = accept(sock, &client_addr, &sock_size);
 	}while(client_sock == -1);
 
-#ifndef WIN32
-	fcntl(client_sock, F_SETFL, O_NONBLOCK);
-#endif
-
 	printf("Got connection. %d\n", client_sock);
 
 	disk_controller.disk_function = disk_function;
@@ -201,11 +152,11 @@ int main(int argc, char *argv[])
 	load_memory();
 
 	// Mount diskette 1 (CP/M OS) and 2 (Tools)
-	disk_drive.disk1.fp = fopen("software/CPM 2.2/cpm63k.dsk", "r+b");
+	//disk_drive.disk1.fp = fopen("software/CPM 2.2/cpm63k.dsk", "r+b");
 	//disk_drive.disk1.fp = fopen("software/BASIC/Floppy Disk/Disk Basic Ver 300-5-F.dsk", "r+b");
-	disk_drive.disk2.fp = fopen("software/CPM 2.2/games.dsk", "r+b");
+	//disk_drive.disk2.fp = fopen("software/CPM 2.2/games.dsk", "r+b");
 	//disk_drive.disk2.fp = fopen("software/BASIC/Floppy Disk/Games on 300-5-F.dsk", "r+b");
-	disk_drive.nodisk.status = 0xff;
+	//disk_drive.nodisk.status = 0xff;
 
 	i8080_examine(&cpu, 0x0000); // ff00 loads from disk, e000 loads basic
 
@@ -232,10 +183,18 @@ int main(int argc, char *argv[])
 
 		if(cmd_switches != last_cmd_state)
 		{
-			last_debounce = millis();
+			#ifndef ARDUINO
+			last_debounce = time(0);
+			#else
+			last_debounce = time(0);
+			#endif
 		}
 
-		if((millis() - last_debounce) > 50)
+		#ifndef ARDUINO
+		if((time(0) - last_debounce) > 50)
+		#else
+		if((time(0) - last_debounce) > 50)
+		#endif
 		{
 			if(cmd_switches != cmd_state)
 			{

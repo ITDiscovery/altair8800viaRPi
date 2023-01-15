@@ -1,7 +1,18 @@
 #ifndef _PI_PANEL_H_
 #define _PI_PANEL_H_
 
-#include "types.h"
+//Define pins using BCM numbering
+#define LEDdPIN  16
+#define LEDlPIN  20
+#define LEDcPIN  21
+#define SWdPIN  19
+#define SWlPIN  13
+#define SWcPIN  26
+//Latch Delay
+#define lDelay 5
+
+#define MSBFIRST 1
+#define LSBFIRST 0
 
 #define RUN 1
 #define STOP 2

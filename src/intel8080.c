@@ -8,9 +8,6 @@
 	#include <SPI.h>
 #endif
 #include "memory.h"
-#ifdef WIN32
-	#include <windows.h>
-#endif
 
 uint8_t get_parity(uint8_t val)
 {

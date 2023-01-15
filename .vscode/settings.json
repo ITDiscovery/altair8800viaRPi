@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "pi_panel.h": "c",
+        "intel8080.h": "c",
+        "string.h": "c",
+        "stdio.h": "c"
+    }
+}
