@@ -1,29 +1,26 @@
-#include <wiringPi.h>
+#include <pigpio.h>
 #include "pi_panel.h"
 
-#define SWITCHES_LOAD 0
-#define SWITCHES_CS 2
-#define LEDSTORE 8
-#define OE 9
-#define MR 7
-
-#define LEDdPIN = 36
-#define LEDlPIN = 38
-#define LEDcPIN = 40
-#define SWdPIN = 35
-#define SWlPIN = 33
-#define SWcPIN = 37
-#define MSBFIRST = 1
+#define LEDdPIN  16
+#define LEDlPIN  20
+#define LEDcPIN  21
+#define SWdPIN  19
+#define SWlPIN  13
+#define SWcPIN  26
+#define MSBFIRST  1
 
 void rpi_init()
 {
-    wiringPiSetup();     //Setup the library
-    pinMode(LEDdPIN, OUTPUT);
-    pinMode(LEDlPIN, OUTPUT);
-	pinMode(LEDcPIN, OUTPUT);
-	pinMode(SWdPIN, INPUT);
-	pinMode(SWcPIN, OUTPUIT);
-	pinMode(SWlPIN, OUTPUT);
+    gpioInitialise ();     //Setup the library
+    gpioSetMode(LEDlPIN,PI_OUTPUT);
+    gpioSetMode(LEDlPIN, PI_OUTPUT);
+	gpioSetMode(LEDcPIN, PI_OUTPUT);
+	gpioSetMode(SWdPIN, PI_INPUT);
+	gpioSetMode(SWcPIN, PI_INPUT);
+	gpioSetMode(SWlPIN, PI_OUTPUT);
+
+    int LEDout = bbI2COpen(LEDcPIN,LEDdPIN,100000);
+    int SWOut = bbI2COpen(SWcPIN,SWdPIN,100000);
 
 }
 
@@ -48,8 +45,9 @@ void read_write_panel(uint8_t status, uint8_t data, uint16_t bus, uint16_t *bus_
 	if(write) {
        // take the latchPin low so
        // the LEDs don't change while you're sending in bits:
-        digitalWrite(LlatchPin, LOW);
+        gpioWrite(LEDlPIN, PI_LOW);
        // Now push data to 74HC595
+
        shiftOut(LdataPin,LclockPin,MSBFIRST,status >> 8);
        shiftOut(LdataPin,LclockPin,MSBFIRST,bus >> 8);
        shiftOut(LdataPin,LclockPin,MSBFIRST,bus);

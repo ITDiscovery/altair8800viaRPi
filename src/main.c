@@ -17,7 +17,7 @@
 	// strcat
 	#include <string.h>
 	#include "pi_panel.h"
-	#include <wiringPi.h>
+	#include <pigpio.h>
 #endif
 
 int sock;
