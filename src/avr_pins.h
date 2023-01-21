@@ -1,5 +1,5 @@
-#ifndef _PINS_H_
-#define _PINS_H_
+#ifndef _AVR_PINS_H_
+#define _AVR_PINS_H_
 
 //Define pins 
 #define LEDdPIN  PIN_PD1
@@ -19,5 +19,8 @@
 #define SDdiPIN  PIN_PC0
 #define SDdoPIN  PIN_PC1
 #define SDcPIN   PIN_PC2
+
+#define MSBFIRST 1
+#define LSBFIRST 0
 
 #endif

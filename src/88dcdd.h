@@ -24,7 +24,7 @@
 
 typedef struct
 {
-#ifdef ARDUINO
+#ifdef __AVR_AVR128DB28__
 	File fp;
 #else
 	FILE* fp;

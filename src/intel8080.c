@@ -1,12 +1,15 @@
 #include "intel8080.h"
 #include "op_codes.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#ifdef ARDUINO
+
+#ifdef AVRONBOARD
 	#include <Arduino.h>
 	#include <SPI.h>
+#else
+    #include <string.h>
+    #include <stdio.h>
+    #include <stdlib.h>
 #endif
+
 #include "memory.h"
 
 uint8_t get_parity(uint8_t val)

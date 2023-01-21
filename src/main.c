@@ -1,9 +1,15 @@
+#if defined(__AVR_AVR128DB28__) || defined(__AVR_AVR64DB28__) || defined(__AVR_AVR64DD28__) 
+  #define AVRONBOARD 0
+  #include pi_pins.h
+#else
+
+// Start Raspberry Pi includes
 #include <stdio.h>
 #include <stdlib.h>
 #include "intel8080.h"
 #include "88dcdd.h"
 
-// socket
+// Socket libraries for RPi
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -11,13 +17,19 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 	
+// Output libraries for RPi 
 #include <string.h>
 #include <time.h>
-#include "pi_panel.h"
 #include <pigpio.h>
+
+#include "pi_panel.h"
 
 int sock;
 int client_sock;
+
+#endif
+
+#include "memory.h"
 
 void dump_regs(intel8080_t *cpu)
 {
@@ -43,10 +55,6 @@ void term_out(uint8_t b)
 	b = b & 0x7f;
 	send(client_sock, (char*)&b, 1, 0);
 }
-
-uint8_t memory[64*1024];
-uint8_t cmd_switches;
-uint16_t bus_switches;
 
 void load_file(intel8080_t *cpu)
 {
