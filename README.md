@@ -1,6 +1,13 @@
 altair8800
 ==========
 
+For RPi, must add: wiringPi as it's been depreciated. pigpio segfaults, so don't use that. 
+
+```
+$ wget https://project-downloads.drogon.net/wiringpi-latest.deb
+$ sudo dpkg -i wiringpi-latest.deb
+```
+
 What is this?
 -------------
 
