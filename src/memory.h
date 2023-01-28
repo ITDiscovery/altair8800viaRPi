@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-#ifdef AVRONBOARD
+/*#ifdef AVRONBOARD
 #include "avr_pins.h"
 
 // Memory calls to 23LC512 RAM
@@ -87,12 +87,7 @@ inline void write16(uint16_t address, uint16_t val)
     digitalWrite(RAMCS, HIGH);
 }
 #else
-
-// Raspberry Pi Memory Calls
-extern uint8_t memory[64*1024];
-extern uint8_t cmd_switches;
-extern uint16_t bus_switches;
-
+*/
 uint8_t read8(uint16_t address)
 {
 	uint8_t data;
@@ -125,5 +120,4 @@ void write16(uint16_t address, uint16_t val)
         write8(address, val & 0xff);
         write8(address+1, (val >> 8) & 0xff);
 }
-#endif
 #endif

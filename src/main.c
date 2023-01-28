@@ -22,6 +22,11 @@
 #include <time.h>
 #include <pigpio.h>
 
+// Raspberry Pi Memory Calls
+extern uint8_t memory[64*1024];
+extern uint8_t cmd_switches;
+extern uint16_t bus_switches;
+
 #include "pi_panel.h"
 
 int sock;
@@ -29,7 +34,7 @@ int client_sock;
 
 #endif
 
-#include "memory.h"
+//#include "memory.h"
 
 void dump_regs(intel8080_t *cpu)
 {

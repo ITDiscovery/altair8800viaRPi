@@ -36,5 +36,9 @@
 
 void rpi_init();
 void read_write_panel(uint8_t status, uint8_t data, uint16_t bus, uint16_t *bus_switches, uint8_t *cmd_switches, uint8_t write);
+uint8_t read8(uint16_t address)
+uint16_t read16(uint16_t address)
+void write8(uint16_t address, uint8_t val)
+void write16(uint16_t address, uint16_t val)
 
 #endif
